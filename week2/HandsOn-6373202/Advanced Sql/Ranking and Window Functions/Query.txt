@@ -1,0 +1,52 @@
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(100),
+    Category VARCHAR(50),
+    Price DECIMAL(10, 2)
+);
+
+INSERT INTO Products (ProductID, ProductName, Category, Price) VALUES
+(1, 'Laptop', 'Electronics', 50000),
+(2, 'Mobile', 'Electronics', 30000),
+(3, 'Tablet', 'Electronics', 25000),
+(4, 'TV', 'Electronics', 45000),
+(5, 'Refrigerator', 'Home Appliance', 60000),
+(6, 'Washing Machine', 'Home Appliance', 40000),
+(7, 'Microwave', 'Home Appliance', 15000),
+(8, 'Chair', 'Furniture', 5000),
+(9, 'Table', 'Furniture', 7000),
+(10, 'Sofa', 'Furniture', 20000),
+(11, 'Bed', 'Furniture', 30000),
+(12, 'AC', 'Electronics', 35000),
+(13, 'Heater', 'Electronics', 12000),
+(14, 'Fan', 'Electronics', 5000),
+(15, 'Oven', 'Home Appliance', 20000),
+(16, 'Wardrobe', 'Furniture', 25000),
+(17, 'Dishwasher', 'Home Appliance', 35000),
+(18, 'Speaker', 'Electronics', 10000),
+(19, 'Blender', 'Home Appliance', 7000),
+(20, 'Bookshelf', 'Furniture', 12000);
+/*1)  */
+    SELECT *FROM (SELECT Category,
+        ProductName,
+        Price,
+        ROW_NUMBER() OVER (PARTITION BY Category ORDER BY Price DESC) AS RowNum
+    FROM Products) RankedProducts
+WHERE RowNum <= 3;
+/*2)*/
+SELECT *FROM (
+    SELECT
+        Category,
+        ProductName,
+        Price,
+        RANK() OVER (PARTITION BY Category ORDER BY Price DESC) AS ProductRank
+    FROM Products) RankedProducts
+WHERE ProductRank <= 3;
+/*3)*/
+SELECT *FROM (
+    SELECT
+        Category,
+        ProductName,
+        Price,
+        DENSE_RANK() OVER (PARTITION BY Category ORDER BY Price DESC) AS ProductDenseRank FROM Products) RankedProducts
+WHERE ProductDenseRank <= 3;

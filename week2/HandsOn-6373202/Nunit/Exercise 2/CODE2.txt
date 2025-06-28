@@ -1,0 +1,26 @@
+CODE :
+
+using Moq;
+using NUnit.Framework;
+using CustomerCommLib;
+
+namespace CustomerCommLib.Tests
+{
+    public class CustomerCommTests
+    {
+        [Test]
+        public void SendMailToCustomer_ShouldReturnTrue_WhenMailIsSentSuccessfully()
+        {
+            var mockMailSender = new Mock<IMailSender>();
+            mockMailSender
+                .Setup(m => m.SendMail("cust123@abc.com", "Some Message"))
+                .Returns(true);
+
+            var comm = new CustomerComm(mockMailSender.Object);
+
+            var result = comm.SendMailToCustomer();
+            Assert.IsTrue(result);
+            mockMailSender.Verify(m => m.SendMail("cust123@abc.com", "Some Message"), Times.Once);
+        }
+    }
+}

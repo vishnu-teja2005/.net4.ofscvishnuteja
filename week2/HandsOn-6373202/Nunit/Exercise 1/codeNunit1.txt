@@ -1,0 +1,32 @@
+
+ Test Project: NUnit + Moq
+CODE :
+
+using NUnit.Framework;
+using CalcLibrary;
+namespace CalcLibrary.Tests
+{
+    [TestFixture]
+    public class CalculatorTests
+    {
+        private Calculator _calc;
+
+        [SetUp]
+        public void Init() => _calc = new Calculator();
+
+        [TearDown]
+        public void Cleanup() => _calc = null;
+
+        [TestCase(2, 3, 5)]
+        [TestCase(-1, 4, 3)]
+        [TestCase(0, 0, 0)]
+        public void Add_ValidInput_ReturnsSum(int a, int b, int expected)
+        {
+            int result = _calc.Add(a, b);
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
+        [Test, Ignore("Skipping demo test")]
+        public void IgnoredTest() => Assert.Fail("This test should not run.");
+    }
+}
